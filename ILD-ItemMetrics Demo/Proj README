@@ -1,0 +1,9 @@
+# Intensive Longitudinal Data (ILD) - ItemMetrics App
+
+This web tool addresses the need for user-friendly, openly accessible tools for researchers (especially those without programming expertise) to explore the psychometric properties and item characteristics of items used in intensive repeated-measures survey designs (such as daily diaries and experience sampling). Despite significant advancements in traditional survey designs and standards, there is still much to learn about those used in intensive, repeated methods. The app provides dynamic visualizations and information in a dashboard format to characterize real datasets, including intraclass correlations (ICCs), reliability measures, reporting frequencies, between- and within-person correlations, and offers recommendations and best practices for using scales and items in new studies.
+
+This video demonstrates key functionalities of a proof-of-concept web tool (R Shiny App) developed in collaboration with Dr. Jacqueline Mogle at Clemson University. Dr. Mogle provided the initial idea, ongoing feedback, and two datasets (MIDUS being publicly available, and the other an internal dataset). I was responsible for the full development of the demo, including design and features, using software engineering best practices, such as Git versioning.
+
+The .mp4 video file can be downloaded and viewed, or you can access the Loom-hosted version of the video here: https://www.loom.com/share/1877dfa78bfd4320ae6bdad3a072db65?sid=b16c8d0b-470d-4776-af11-3397c8c7afff. There is no sound.
+
+Full development of the app would include additional and refined features. The repository for this project is currently private. You may contact me at nndemeo@gmail.com to discuss the app further. 
