@@ -1,0 +1,760 @@
+---
+params:
+  project: >
+     PA Measurement Reactivity R03
+  dataset: "MIDUS"
+  doc_desc: |
+    __NOTE: THIS DOCUMENT IS A TRUNCATED VERSION OF REAL DATA PROCESSING USING RMARKDOWN/HTML; EXAMPLE TO ILLUSTRATE DOCUMENTATION AND TEMPLATING__
+    
+    
+    __This document is part of the {{params$project}} project, focusing on data from the {{params$dataset}} study.__
+    
+    __This specific document details cleaning of physical activity data.__
+    
+title: "`r paste0(trimws(params$project), ': ', trimws(params$dataset))`"
+subtitle: "Physical Activity Data Cleaning"
+date: "`r format(Sys.time(), '%a %d %b, %Y')`"
+editor_options: 
+  chunk_output_type: console
+---
+
+<div class="doc-decor">
+
+<img src="D:/Git Repositories/PA-Meas-Reactivity-PROJ/rmd/h/clock.jpeg" alt="timestamp" height="20px"> `r format(Sys.time(), '%a, %b %d %Y at %H:%M:%S %Z')`
+
+# `r rmarkdown::metadata$subtitle` {.unnumbered .unlisted}
+
+
+## Document Description and Content {.unnumbered .unlisted}
+
+`r knitr::knit_expand(text = params$doc_desc)`
+
+</div>
+
+```{r, include=FALSE}
+here::i_am(path = 'MIDUS_dataprocessing_example.Rmd')
+```
+
+```{r}
+#| child = here::here("child_docs/setup-child.Rmd")
+```
+
+```{r, include=FALSE}
+source("D:/Git Repositories/DataSciFunctions/R/import_functions.R")
+import_functions()
+```
+
+# Overview — `r paste0(trimws(params$project), ": ", trimws(params$dataset))`
+
+## `r paste0(trimws(params$project))` Background
+
+```{r}
+#| child = here::here("child_docs/proj_background.Rmd")
+```
+
+
+## `r paste0(trimws(params$dataset))` Background
+
+```{r}
+#| child = here::here("child_docs/MIDUS_background.Rmd")
+```
+
+# Prep
+
+```{r}
+#| child = here::here("child_docs/conflicts_child.Rmd")
+```
+
+```{r}
+five_hr_min <- 5*60
+ten_hr_min <- 10*60
+```
+
+## Project and Directory Info 
+
+```{r}
+get_project_info_custom()
+
+WD<-get_project_info_custom() %>%
+  .$"Working Directory"
+
+RProj<-get_project_info_custom() %>%
+  .$"R Project Name"
+
+MIDUS_raw_data <-("G:/Shared drives/Rowan CHASE Lab/3. PA Measurement Reactivity/NIH R03 Award/Datasets/2. MIDUS/Data and Codebooks/Raw Data/")
+
+MIDUS_WF <-("G:/Shared drives/Rowan CHASE Lab/3. PA Measurement Reactivity/NIH R03 Award/Datasets/2. MIDUS/Data and Codebooks/ND Working Files/Cache/")
+```
+
+## Reading in Datasets
+
+```{r} 
+CB_all <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep2_CB_all_2024-07-17_08-07-11",".rds"))
+
+data_all_pers <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep2_data_all_pers_2024-07-17_08-07-09",".rds"))
+```
+
+\
+The files below are the same version as prepped in prep1
+\
+
+```{r} 
+M2P1 <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep1_M2P1_2024-07-12_06-55-58",".rds"))
+
+M2P1b <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep1_M2P1b_2024-07-12_06-56-03",".rds"))
+
+M2P1_SAQ <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep1_M2P1_SAQ_2024-07-12_06-56-02",".rds"))
+
+M2P4_1 <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep1_M2P4_1_2024-07-12_06-56-06",".rds"))
+
+M2P4_2 <- readRDS(file = paste0(MIDUS_WF,"PA_Meas_Rct_MIDUS_prep1_M2P4_2_2024-07-12_06-56-09",".rds"))
+```
+
+### Data Structure 
+
+```{r}
+df_names <- c(ls(pattern = "^M2"),"data_all_pers")
+df_names <- df_names[sapply(mget(df_names), is.data.frame)]
+list_of_dfs <- mget(df_names) # pulls the actual dataframes into a list of them
+```
+
+```{r, results='asis'}
+print_dataset_info(list_of_dfs)
+print_dataset_info_long(list_of_dfs, id_var = "ID")
+```
+
+## Dataset Info (Same as Previous Doc Versions)
+
+(Note: this is the same info as the previous document/prep1).
+\
+
+### MIDUS 2 Project 1 (2004 to 2006)
+
+> Project 1 provided follow-up on the psychosocial, sociodemographic, and health variables assessed in MIDUS 1.
+> — https://midus.wisc.edu/midus2/project1/
+
+
+#### Wide-Form (Phone) Survey Data (M2P1)
+
+- M2P1 (copy from Jacquie; decided to use this as the main file because it has the most data so other file became 'b')
+- M2P1b 
+
+
+#### Wide-Form SAQ Data (M2P1_SAQ)
+
+\
+(Phone) Modified "Self-Administered Questionnaire"
+\
+For those who did not complete a mailed-version of the SAQ during MIDUS 1
+\
+
+- M2P1_SAQ
+
+### MIDUS 2 Project 4 (2005 to 2009)
+
+> Project 4 included comprehensive biomarker assessments on a subsample of MIDUS respondents, collected at one of three General Clinical Research Centers around the country.
+> — https://midus.wisc.edu/midus2/project4/
+
+#### Wide-Form Biomarker Data
+
+This is where the actigraphy data is that is needed for this project.
+
+- M2P4_1
+
+##### Long-Form Medication Data (M2P4_2)
+
+- M2P4_2
+
+
+### Summary
+
+- Physical Activity data is in M2P4_1 and has to be converted to long format
+- All data (including PA data) is in data_all_pers (note: the stacked medication data from M2P4_2 is just the first row for each participant merged in)
+- Current exclusion criteria does not factor in CVD info yet and needs to be updated 
+
+
+# Updating Core Exclusion Flag
+
+```{r}
+data_all_pers <- data_all_pers %>%
+  mutate(
+    core_excl2 = case_when(
+      is.na(age_num) | is.na(gender_num) | is.na(pre_CVD) | is.na(CVD_risk_sum) ~ 1,
+      age_40_to_60_num == 1 & pre_CVD == 0 & CVD_risk_sum >= 1 ~ 0,
+      TRUE ~ 1
+    ),
+    core_excl2 = sjlabelled::set_labels(
+      core_excl2,
+      labels = c(
+        `0` = "Include participant",
+        `1` = "Exclude participant"
+      ), 
+      force.labels = TRUE,
+      force.values = TRUE,
+    ),
+    core_excl2 = datawizard::assign_labels(
+      core_excl2,
+      variable = "bin flag: whether a person should be included (0) or excluded (1) based on core exclusion criteria (updated to exclude those without 1+ risk factors or not enough info)"
+    ),
+    core_excl2_fct = sjlabelled::as_label(core_excl2,
+      add.non.labelled = TRUE,
+      prefix = TRUE
+    )
+    ) 
+
+CB_all <- CB_add_OG(CB_all, data_all_pers, (data_all_pers %>% select(contains("core")) %>% colnames()), vlabel = TRUE)
+
+data_all_pers <- reapply_attr2(CB_all, data_all_pers)
+```
+
+```{r eval=FALSE, include=FALSE}
+data_all_pers %>%
+  select(contains("core")) %>%
+  str()
+```
+
+```{r}
+data_all_pers %>%
+  mutate(
+    CVD_risk_sum = case_when(
+      is.na(CVD_risk_sum) ~ 0,
+      CVD_risk_sum >= 1 ~ 1,
+      CVD_risk_sum < 1 ~ 0,
+      TRUE ~ 9999
+    )
+    ) %>%
+  count(core_excl2_fct,age_40_to_60_fct,pre_CVD_fct, CVD_risk_sum) %>%
+  select(n,everything()) %>%
+  arrange(desc(n)) %>%
+  def_reactable(defminWidth = 100,
+                firstminWidth = 50)
+```
+
+
+```{r}
+data_all_pers %>%
+  count(core_excl_fct, core_excl2_fct) %>%
+  select(n,everything()) %>%
+  arrange(desc(n)) %>%
+  def_reactable(defminWidth = 100,
+                firstminWidth = 50)
+```
+
+- Losing 59 participants related to CVD risk/pre-existing CVD 
+
+
+# Physical Activity Variables
+
+:::{.notice-box}
+The actigraphy-derived PA data in MIDUS is part of the P4 sleep data. It appears the investigators were most focused on actigraphy related to sleep, but day-time actigraphy data is also available. Participants kept daily sleep diaries, which were used to understand and clean the actigraphy data. 
+
+This data was collected starting the "Tuesday after the day the respondent returns home following the GCRC visit." There are a total of 7 rest periods, 7 sleep periods, and 6 active periods. These different periods were defined using information from the sleep diary.
+
+- Rest: Time spent in bed trying to sleep (based on sleep diary self-reports)
+- Sleep/Wake: Automatically scored by Actiware software
+
+The most detailed information appears in M2P4 Sleep Data Documentation.
+
+We will be using the actigraphy data from the "active" periods.
+:::
+
+
+
+## Time Btwn Main P4 and Sleep/Actigraphy
+
+```{r echo=FALSE}
+CB_all %>%
+  select(Variable_Name, OG_Variable_Name, Variable_Label, Value_Labels, Variable_Levels, Comments) %>%
+  filter(Variable_Name == "M2P4_1_B4AWLAG") %>%
+  arrange(desc(Variable_Name)) %>%
+  CB_reactable(., 
+               data_name = "MIDUS", 
+               tool_tip = 'Dataset Identifier + Original Name)', 
+               pagination = FALSE, filterable = FALSE, showSortable = FALSE,
+               maxHeight = "250px", minHeight = "50px",
+               defminWidth = 160, firstminWidth = 180, dataset_minWidth = 170, comm_minWidth = 130)
+```
+
+```{r}
+data_all_pers %>%
+  select(M2P4_1_B4AWLAG) %>%
+  table(.) %>% 
+  data.frame() %>%
+  mutate(
+    Perc = case_when(
+      Freq == 0 ~ 0,
+      Freq > 0 ~ round((Freq/sum(Freq) *100),2),
+      TRUE ~ 9999
+    )
+  ) %>%
+  desc_reactable(defminWidth = 70,
+                firstminWidth = 180)
+```
+
+\
+Most participants start the PA protocol within a week of the other P4 measures, but some wait as long as ~ a month.
+\
+
+## Number of Entries of Actigraphy Data
+
+```{r}
+data_all_pers %>%
+  mutate(
+    M2P4_1_B4WACTENT = to_numeric(M2P4_1_B4WACTENT)
+  ) %>%
+  filter(core_excl2 == 0) %>%
+  select(M2P4_1_B4WACTENT) %>%
+  table(.) %>% 
+  data.frame() %>%
+  mutate(
+    Perc = case_when(
+      Freq == 0 ~ 0,
+      Freq > 0 ~ round((Freq/sum(Freq) *100),2),
+      TRUE ~ 9999
+    )
+  ) %>%
+  desc_reactable(defminWidth = 70,
+                firstminWidth = 180)
+```
+
+```{r}
+data_all_pers %>%
+  mutate(
+    M2P4_1_B4WACTENT = to_numeric(M2P4_1_B4WACTENT)
+  ) %>%
+  filter(core_excl2 == 0) %>%
+  select(M2P4_1_B4WACTENT) %>%
+  mutate(across(everything(), to_numeric)) %>%
+  { describe_ND(., colnames(.)) } %>%
+  tibble::rownames_to_column(., var = "var") %>%
+  rename_with(~ c("vars", "n", "Mn","Md","SD","min","max","skew","kurt","trim","MAD","rng","se"), .cols = everything()) %>%
+  desc_reactable(defminWidth = 80,
+                firstminWidth = 180)
+```
+
+## Data collection period start time
+
+```{r}
+data_all_pers %>%
+ mutate(
+    M2P4_1_B4WPSTI = to_numeric(M2P4_1_B4WPSTI)
+  ) %>%
+  filter(core_excl2 == 0) %>%
+  select(M2P4_1_B4WPSTI) %>%
+  table(.) %>% 
+  data.frame() %>%
+  mutate(
+    Perc = case_when(
+      Freq == 0 ~ 0,
+      Freq > 0 ~ round((Freq/sum(Freq) *100),2),
+      TRUE ~ 9999
+    )
+  ) %>%
+  desc_reactable(defminWidth = 70,
+                firstminWidth = 180)
+```
+
+
+## Converting PA to Long-Format
+
+Converting all actigraphy variables to long format
+\
+
+```{r}
+data_PA <- data_all_pers %>%
+  pivot_longer(
+    cols = matches("^M2P4_1_B4W[ARS]\\d+[A-Za-z0-9_.]+$"),
+    names_to = c("prefix", "PA_data_day", "suffix"),
+    names_pattern = "^M2P4_1_(B4W[ARS])(\\d+)([A-Za-z0-9_.]+)$",
+    values_drop_na = TRUE
+  ) %>%
+  mutate(
+    PA_data_day = as.integer(PA_data_day)
+  ) %>%
+  pivot_wider(
+    names_from = c(prefix, suffix),
+    values_from = value,
+    names_sep = "_"
+  ) 
+```
+
+\
+56 new variables from "elongated" repeated measures
+\
+
+```{r}
+setdiff(colnames(data_PA),colnames(data_all_pers))
+```
+
+\
+368 variables dropped from moving to long format
+\
+
+```{r}
+setdiff(colnames(data_all_pers), colnames(data_PA))
+```
+
+\
+Types of variables added (based on suffixes):
+\
+
+```{r}
+data_all_pers %>%
+  pivot_longer(
+    cols = matches("^M2P4_1_B4W[ARS]\\d+[A-Za-z0-9_.]+$"),
+    names_to = c("prefix", "PA_data_day", "suffix"),
+    names_pattern = "^(M2P4_1_B4W[ARS])(\\d+)([A-Za-z0-9_.]+)$",
+    values_drop_na = TRUE
+  ) %>%
+  select(suffix) %>%
+  distinct() %>%
+  count()
+
+suffixes <- data_all_pers %>%
+  pivot_longer(
+    cols = matches("^M2P4_1_B4W[ARS]\\d+[A-Za-z0-9_.]+$"),
+    names_to = c("prefix", "PA_data_day", "suffix"),
+    names_pattern = "^(M2P4_1_B4W[ARS])(\\d+)([A-Za-z0-9_.]+)$",
+    values_drop_na = TRUE
+  ) %>%
+  select(suffix) %>%
+  distinct() 
+
+suffixes$suffix
+```
+
+```{r include=FALSE}
+rm(suffixes)
+```
+
+
+\
+Updating labels:
+\
+
+```{r}
+# List of suffix explanations
+suffix_explanations <- list(
+  SDY = "start day",
+  ST = "start time",
+  EDY = "end day",
+  ET = "end time",
+  TAC = "total activity counts",
+  ACM = "average activity counts/min",
+  MAC = "maximum activity counts",
+  IAC = "invalid activity counts",
+  SW = "percent invalid sleep/wake time",
+  WT = "wake time",
+  PW = "percent wake time",
+  WB = "wake bouts",
+  AWB = "average wake bouts",
+  SLT = "sleep time",
+  PSL = "percent sleep time",
+  SLB = "sleep bouts",
+  ASB = "average sleep bouts",
+  ISW = "percent invalid sleep/wake time", 
+  OL = "sleep onset latency",
+  SNT = "time dozing before rising",
+  EFF = "sleep efficiency",
+  WSO = "wake after sleep onset"
+)
+
+# Function to assign labels based on the suffix explanations
+assign_variable_labels <- function(data, prefixes, suffix_explanations) {
+  for (prefix in prefixes) {
+    for (suffix in names(suffix_explanations)) {
+      var_name <- paste0(prefix, "_", suffix)
+      if (var_name %in% colnames(data)) {
+        explanation <- suffix_explanations[[suffix]]
+        label <- paste("PA variable:", 
+                       ifelse(prefix == "B4WA", "active period,", 
+                              ifelse(prefix == "B4WR", "rest period,", 
+                                     "sleep period,")), 
+                       "daily", explanation)
+        data <- data %>%
+          mutate(!!sym(var_name) := datawizard::assign_labels(
+            .data[[var_name]],
+            variable = label
+          ))
+      }
+    }
+  }
+  data
+}
+
+# List of prefixes
+prefixes <- c("B4WA", "B4WR", "B4WS")
+
+# Apply the function to the dataset
+data_PA <- assign_variable_labels(data_PA, prefixes, suffix_explanations)
+
+CB_all <- CB_add_OG(CB_all, data_PA, (data_PA %>% select(starts_with("B4WA"), starts_with("B4WS"), starts_with("B4WR")) %>% colnames()), vlabel = TRUE)
+data_PA <- reapply_attr2(CB_all, data_PA)
+```
+
+\
+Removing old variables from CB
+\
+
+```{r}
+varsToRemove <- setdiff(colnames(data_all_pers), colnames(data_PA))
+
+CB_all<-CB_all %>%
+  filter(!(Variable_Name %in% varsToRemove)) 
+```
+
+
+
+
+
+
+
+# *Appendix* {.unnumbered}
+
+## *Software and Computer Information* {.unnumbered}
+
+```{r, include=FALSE}
+here::i_am(path = 'MIDUS_dataprocessing_example.Rmd')
+```
+
+```{r include=FALSE}
+get_project_info_custom()
+
+WD<-get_project_info_custom() %>%
+  .$"Working Directory"
+
+RProj<-get_project_info_custom() %>%
+  .$"R Project Name"
+
+# MIDUS_raw_data <-("G:/Shared drives/Rowan CHASE Lab/3. PA Measurement Reactivity/NIH R03 Award/Datasets/2. MIDUS/Data and Codebooks/Data Curated by KB/")
+
+MIDUS_WF <-("G:/Shared drives/Rowan CHASE Lab/3. PA Measurement Reactivity/NIH R03 Award/Datasets/2. MIDUS/Data and Codebooks/ND Working Files/Cache/")
+```
+
+\
+**Project:** `r md_text(RProj)` \
+**R Markdown Working Directory:** `r md_text(WD)`
+\
+\
+
+### *Comprehensive Session Info* {-}
+
+```{r}
+(sessioninfo::session_info(pkgs = c("loaded"), include_base = TRUE, info = "all", dependencies = TRUE, to_file = paste0(MIDUS_WF,"Session Logs/session-info_", formatDateTime(), ".txt")))
+```
+
+#### *More Detailed Package Info* {.unnumbered}
+
+```{r}
+package_info_attached <- sessioninfo::package_info(pkgs = c("attached"), include_base = TRUE, dependencies = TRUE)
+
+save(package_info_attached, file = paste0(MIDUS_WF,"Session Logs/pkg-dtl-info_", formatDateTime(), ".RData"))
+
+package_info_attached2 <- package_info_attached %>% dplyr::select(-package, -path, -loadedpath, -library)
+
+package_info_attached2 %>% data.frame()
+```
+
+## *Custom R Functions* {.unnumbered}
+
+\
+*Note: some functions may be under development, and not all were used for this project.* 
+\
+
+::: table-scroll
+
+```{r}
+#| child = here::here("child_docs/appendix_custom_func.Rmd")
+```
+
+:::
+
+## *Annotations and Key* {.unnumbered}
+
+::: notice-box
+**This box indicates important information but not action items.**
+:::
+
+::: pending-box
+**This box indicates action items.**
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r eval=FALSE, include=FALSE}
+# from cleaning_MIDUS_demo_2023-08-26.Rmd
+
+library(lme4)
+
+model_wake <- lmer(MIM_avg_wake ~ studyday_base + (1 | id), data = MIDUS_all_CVDrisk_wom[which(MIDUS_all_CVDrisk_wom$min10_totalwake==1),])
+summary(model_wake)
+
+model_valid <- lmer(MIM_avg_valid ~ studyday_base + (1 | id), data = MIDUS_all_CVDrisk_wom[which(MIDUS_all_CVDrisk_wom$min10_totalvalid==1),])
+summary(model_valid)
+
+daysperid_wake <- MIDUS_all_CVDrisk_wom_sel %>%
+  group_by(id) %>%
+  group_modify(~ summarise(.,n = sum(!is.na(studyday))))
+
+daysperid_valid <- MIDUS_all_CVDrisk_wom_sel2 %>%
+  group_by(id) %>%
+  group_modify(~ summarise(.,n = sum(!is.na(studyday))))
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+# from cleaning_MIDUS_PA_2023-08-24
+# 2013 to 2014 MIDUS data cleaned by Kiri
+# Physical activity data (day-level)
+
+MIDUS_Kiri_PA %>%
+  group_by(studyday) %>%
+  do(describe(.$MIM_per_min))
+
+statistics <- MIDUS_Kiri_PA %>%
+  group_by(studyday) %>%
+  summarise(
+    mean = mean(MIM_per_min, na.rm = TRUE),
+    sd = sd(MIM_per_min, na.rm = TRUE)
+  )
+library(ggplot2)
+
+ggplot(statistics, aes(x = factor(studyday), y = mean)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(
+    aes(ymin = mean - sd, ymax = mean + sd),
+    width = 0.2,
+    position = position_dodge(0.9)
+  ) +
+  xlab("Study Day") +
+  ylab("Mean of MIM_per_min") +
+  theme_minimal()
+
+
+interaction.plot(MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),"studyday"],MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),"id"], MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),"MIM_per_min"])
+
+interaction.plot(MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),"studyday"],MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),"id"], MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),"MIM_per_min"],ylim=c(0,50))
+
+
+person_level<-MIDUS_Kiri_PA %>%
+  group_by(id) %>%
+  do(describe(.$MIM_per_min))
+
+
+print(MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$id==75012),])
+
+library(lme4)
+model <- lmer(MIM_per_min ~ studyday + (1 | id), data = MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$min10hrs==1),])
+summary(model)
+
+
+
+freq(MIDUS_Kiri_PA$weekday)
+
+
+MIDUS_Kiri_PA$weekday_txt<-MIDUS_Kiri_PA$weekday
+
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==1,"weekday_txt"]<-"Sun"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==2,"weekday_txt"]<-"Mon"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==3,"weekday_txt"]<-"Tues"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==4,"weekday_txt"]<-"Wed"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==5,"weekday_txt"]<-"Thurs"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==6,"weekday_txt"]<-"Fri"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt==7,"weekday_txt"]<-"Sat"
+MIDUS_Kiri_PA[MIDUS_Kiri_PA$weekday_txt=="","weekday_txt"]<-NA
+
+freq(MIDUS_Kiri_PA$weekday, order="freq")
+freq(MIDUS_Kiri_PA$weekday_txt, order="freq")
+
+
+colnames(MIDUS_Kiri_PA)
+
+MIDUS_PA<-MIDUS_Kiri_PA[,c(1:3,12,4,13,5,8,7,10,11,9,6)]
+
+
+freq(MIDUS_Kiri_PA[which(MIDUS_Kiri_PA$studyday==1),"weekday_txt"],order="freq")
+
+MIDUS_PA$weekday_bin <- ifelse(MIDUS_PA$weekday %in% 2:6, 1, 
+                                ifelse(MIDUS_PA$weekday %in% c(1, 7), 0, NA))
+
+
+MIDUS_PA <- MIDUS_PA %>%
+  group_by(id) %>%
+  mutate(weekday_start = ifelse(studyday == 1, weekday_bin[studyday == 1],weekday_bin[studyday == 1])) %>%
+  ungroup()
+
+
+freq(MIDUS_PA[MIDUS_PA$studyday == 1,"weekday_start"],order="freq")
+
+
+
+colnames(MIDUS_PA)
+
+MIDUS_PA<-MIDUS_PA[,c(1:6,14,15,7:13)]
+
+
+
+
+
+  
+pacman::p_load(summarytools, psych, ggplot2, dplyr, hablar)
+# freq(MIDUS_demo_wom$race_eth)
+# freq(MIDUS_demo_wom$marital)
+
+
+freq(MIDUS_demo_wom[,5:11])
+
+
+install.packages("Hmisc")
+require(Hmisc)
+
+
+
+
+
+# install.packages("haven")
+# install.packages("MIDUSA")
+require(MIDUSA)
+require(haven)
+
+MIDUS_min<-read_xpt(file="H:/My Drive/Clemson and Rowan/PA Reactivity R03/Data/MIDUS/Natasha fresh data 2023-08-21/2013-2014/Minute Data/PAXMIN_H.XPT")
+MIDUS_hr<-read_xpt(file="H:/My Drive/Clemson and Rowan/PA Reactivity R03/Data/MIDUS/Natasha fresh data 2023-08-21/2013-2014/Hour Data/PAXHR_H.XPT")
+MIDUS_day<-read_xpt(file="H:/My Drive/Clemson and Rowan/PA Reactivity R03/Data/MIDUS/Natasha fresh data 2023-08-21/2013-2014/Day Data/PAXDAY_H.XPT")
+MIDUS_Kiri_PA<-read.csv(file="H:/My Drive/Clemson and Rowan/PA Reactivity R03/Data/MIDUS/Data from Kiri/MIDUS_padata_may4_ NND 2023-08-21.csv",header=T)
+
+MIDUS_Kiri_demo<-read.csv(file="H:/My Drive/Clemson and Rowan/PA Reactivity R03/Data/MIDUS/Data from Kiri/MIDUSdataset_may15_demo NND 2023-08-21.csv",header=T)
+
+header<-MIDUS('PAXMIN_H', includelabels = T)
+
+```
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+
+```{r message=FALSE, warning=FALSE}
+# Combined list of conflicts_prefer() calls
+combined_conflicts <- c(
+  "dplyr::select",
+  "dplyr::mutate",
+  "dplyr::rename",
+  "dplyr::filter",
+  "summarytools::freq",
+  "dplyr::count",
+  "dplyr::summarise",
+  "dplyr::n",
+  "dplyr::arrange",
+  "dplyr::lag",
+  "skimr::n_unique",
+  "skimr::n_missing",
+  "here::here",
+  "tidyr::replace_na"
+)
+
+# Remove duplicates
+unique_conflicts <- unique(combined_conflicts)
+
+# Sort the list by package and function name
+sorted_conflicts <- sort(unique_conflicts)
+
+sorted_conflicts
+
+# Assuming conflicts_prefer() is defined and can be called like this
+for (conflict in sorted_conflicts) {
+  eval(parse(text = paste0("conflicted::conflicts_prefer(", conflict, ")")))
+}
+```
+
+

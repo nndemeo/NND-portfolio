@@ -1,0 +1,45 @@
+
+
+<button class="btn btn-outline-primary btn-sm btn-block btn-ex" type="button" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">Expand Section!</button>
+  
+<div class="collapse" id="collapse2">
+
+:::{.scroll-400b}
+
+>The first national survey of Midlife Development in the U.S. (MIDUS) was conducted in 1995/96 by the MacArthur Foundation Research Network on Successful Midlife Development. The study was conceived by a multidisciplinary team of scholars from fields of psychology, sociology, epidemiology, demography, anthropology, medicine, and health care policy. Their collective aim was to investigate the role of behavioral, psychological, and social factors in accounting for age-related variations in health and well-being in a national sample of Americans. In addition to a national probability sample (N = 3,487), the study included over-samples in select metropolitan areas (N = 757), a sample of siblings (N = 950) of the main respondents, and a national sample of twin pairs (N=1,914). \
+>\
+>The first wave of data collection ... consisted of a general population survey, as well as surveys of siblings of the general population respondents, and a twin pairs sample. The main data collection also included an oversample of five metropolitan areas. In addition to the main national survey, random subsamples of respondents were recruited to participate in in-depth investigations of selected topics, such as management strategies for coping with stressful experiences, a national study of daily experiences, and a study of psychological experiences.\
+>\
+>In 2002 the University of Wisconsin Institute on Aging was awarded a grant from the National Institute on Aging to continue the MIDUS series.\
+>\
+>In 2011-2014, the MIDUS Refresher study recruited a national probability sample of 3,577 adults, aged 25 to 74, designed to replenish the original MIDUS 1 baseline cohort and paralleling the five decadal age groups of the MIDUS 1 baseline survey. The MIDUS Refresher survey employed the same comprehensive assessments as those assembled on the existing MIDUS sample, but with additional questions about the effect of the economic recession of 2008-09. This new cross-sectional MIDUS sample allows the examination of period effects on health (mental and physical) related to the economic recession by comparing the pre-recession MIDUS 1 sample with the post-recession MIDUS Refresher sample.\
+>\
+> — Modified excerpts from https://midus.wisc.edu/ \
+
+
+**MIDUS 2 Project 1 (2004 to 2006)**
+
+> Project 1 provided follow-up on the psychosocial, sociodemographic, and health variables assessed in MIDUS 1.
+> — https://midus.wisc.edu/midus2/project1/
+
+**MIDUS 2 Project 4 (2005 to 2009)**
+
+> Project 4 included comprehensive biomarker assessments on a subsample of MIDUS respondents, collected at one of three General Clinical Research Centers around the country.
+> — https://midus.wisc.edu/midus2/project4/
+
+
+More information on and content from MIDUS is found on:
+
+- https://midus.wisc.edu & https://midus.wisc.edu/midus2/index.php
+  - [Data Collection Timeline](https://midus.wisc.edu/data/timeline.php)
+  - [Study Flow and Participant Characteristics](https://midus.wisc.edu/findings/Understanding_Data_Collection_in_MIDUS_20230126.pdf)
+  - [Participant Overlap Across Projects](https://midus.wisc.edu/cross_proj/index.php)
+- [midus.colectica.org](midus.colectica.org) 
+- https://www.icpsr.umich.edu/web/NACDA/series/203
+
+:::
+
+
+
+
+</div>

@@ -1,0 +1,100 @@
+ 
+```{r setup, include=FALSE}
+# Set knitr global options
+knitr::opts_chunk$set(
+  tidy = "styler",
+  echo = TRUE,
+  warning = TRUE,
+  comment = ""
+)
+
+# Set global R option to discourage scientific notation
+options(scipen = 999)
+
+cli::pretty_print_code()
+```
+
+```{r loading-packages, message=FALSE, warning=FALSE, include=FALSE}
+library(conflicted)
+
+library(bookdown)
+library(bslib)
+library(bsplus)
+# library(bsTools) # this loads HTML5 package which causes issues
+library(cleaner)
+library(cli)
+library(codebook)
+library(codetools)
+library(corrr)
+library(DT)
+library(datadigest)
+library(data.table)
+library(epiDisplay)
+library(esquisse)
+library(foreach)
+library(ggpattern)
+library(ggstats)
+library(gitcreds)
+library(gluedown)
+library(grid)
+library(gridBase)
+library(gridExtra)
+library(haven)
+library(here)
+library(Hmisc)
+library(htmltools)
+library(janitor)
+library(kableExtra)
+library(knitr)
+library(labelled)
+library(lintr)
+library(lubridate)
+library(mime)
+library(multilevel)
+library(pander)
+library(plotly)
+library(plyr)
+library(prefixer)
+library(prettycode)
+library(psych)
+library(R.oo)
+library(R.utils)
+library(radiant.basics)
+library(radiant.data)
+library(rapportools)
+library(reactable)
+library(read.so)
+library(remotes)
+library(rlist)
+library(rmarkdown)
+library(rmdformats)
+library(rmdpartials)
+library(roxygen2Comment)
+library(rstudioapi)
+library(salty)
+library(scales)
+library(servr)
+library(shiny)
+library(shinydashboard)
+library(shinyjs)
+library(sjlabelled)
+library(sjmisc)
+library(sjstats)
+library(skimr)
+library(sparkline)
+library(statpsych)
+library(stats)
+library(stringi)
+library(stringr)
+library(summarytools)
+library(tippy)
+library(usethis)
+library(vctrs)
+library(xaringan)
+library(xfun)
+library(ymlthis)
+
+library(tidyverse) # loads ggplot2, tibble, tidyr, readr, purrr, dplyr, stringr, forcats
+
+```
+

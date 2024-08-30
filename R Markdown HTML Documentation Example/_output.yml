@@ -1,0 +1,23 @@
+bookdown::html_document2:
+ toc: TRUE
+ repo: NULL
+ version: 4
+ footnotes_inline: TRUE
+ df_print: paged
+ theme:
+   version: 4 
+   bootswatch: simplex
+   bg: "#ffffff" 
+   fg: "#000000"   
+   primary: "#a8818c" 
+   secondary: "#81a0a8" 
+   enable-shadows: FALSE 
+ template: D:\Git Repositories\DataSciDocuments\inst\h\bs4_book_edit.html
+ includes:
+    in_header: D:\Git Repositories\DataSciDocuments\inst\h\bs4_bk_PA-Meas.html
+ md_extension: -blank_before_header+lists_without_preceding_blankline 
+ lib_dir: libs 
+ extra_dependencies: !expr c(list(htmltools::htmlDependency(name = "bs4_book", version = "1.0.0", src = "C:/Users/nndem/AppData/Local/R/win-library/4.3/bookdown/resources/bs4_book",  stylesheet = c("bs4_book.css"), script = c("bs4_book.js")),rmarkdown::html_dependency_jquery(),rmarkdown::html_dependency_jqueryui()),bslib::bs_theme_dependencies(bslib::bs_theme(version = 4, bootswatch = "simplex")))
+ css: D:\Git Repositories\DataSciDocuments\inst\h\bs4_bk_PA-Meas.css
+ pandoc_args: ["--metadata-file","D:/Git Repositories/PA-Meas-Reactivity-PROJ/rmd/_yaml.yml"]
+ 

@@ -1,0 +1,102 @@
+
+```{r echo=FALSE, results='asis'}
+functions<-import_functions2()
+
+
+list_of_functions <- sort(extract_function_names2(functions$filepaths))
+
+# cat(paste(
+#   "list_of_functions <- c(\n",
+#   paste0('     "', list_of_functions, '"', collapse = ",\n"),
+#   "\n)",
+#   sep = ""
+# ))
+
+list_of_functions <- c(
+     "calculate_frequency",
+     "CB_add_OG",
+     "CB_intermediate",
+     "CB_intermediate2",
+     "CB_OG_rename",
+     "CB_reactable",
+     "ctable_reactable",
+     "def_reactable",
+     "def_shiny_reactable",
+     "desc_by_grph",
+     "desc_by_rct",
+     "desc_reactable",
+     "describe_ND",
+     "easy_col_rename",
+     "easy_col_rename_alt",
+     "extract_attributes",
+     "extract_function_names",
+     "extract_function_names2",
+     "extract_original_var_names",
+     "extract_variable_names",
+     "extract_variable_pairs",
+     "fix_colnames",
+     "format_table_freq",
+     "formatDate",
+     "formatDateTime",
+     "generate_label_code",
+     "generate_label_trio",
+     "generate_labels",
+     "generate_markdown",
+     "generate_mutate_to_numeric",
+     "generate_rename_code",
+     "generate_select",
+     "get_project_info",
+     "ggplot_hist_with_curve_ggplot",
+     "ggplot_hist_with_curve_ggplot_WT",
+     "import_functions",
+     "import_functions2",
+     "labels_to_string",
+     "load_rds",
+     "plot_bar_graph_multi",
+     "plot_both",
+     "plot_both_WT",
+     "plot_box_with_quantiles",
+     "plot_box_with_quantiles_WT",
+     "print_dataset_info",
+     "print_dataset_info_long",
+     "print_dataset_info_long_alt",
+     "reactable_freq",
+     "reactable_freq_data",
+     "reactable_freq_data2",
+     "reactable_freq_shiny",
+     "reapply_attr",
+     "reapply_attr2",
+     "rename_vars_general",
+     "rename_vars_ILD",
+     "render_toc3",
+     "safe_attr",
+     "save_data",
+     "save_data_csv",
+     "save_data_rda",
+     "save_each_object",
+     "save_each_object_RDS",
+     "SL_modify_dataset",
+     "summarytools_df",
+     "to_character",
+     "to_numeric",
+     "type_NA",
+     "value_label_code",
+     "walk",
+     "with_tooltip"
+  )
+```
+
+
+```{r echo=FALSE, results="asis"}
+content <- lapply(list_of_functions, function(name) {
+  # Retrieve the function object by name and get its source code
+  func_code <- deparse(get(name, .GlobalEnv))
+  # Use md_fence or similar to format the function's code for Markdown
+  formatted_code <- md_fence(paste(func_code, collapse = "\n"))
+  
+  # Combine the formatted code with the header for the function
+  paste('\n### ', name, ' {.unnumbered}\n\n', formatted_code, '\n\n', sep = "")
+})
+ 
+cat(unlist(content), sep = "\n")
+```

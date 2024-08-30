@@ -1,0 +1,39 @@
+
+
+<button class="btn btn-outline-primary btn-sm btn-block btn-ex" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">Expand Section!</button>
+  
+<div class="collapse" id="collapse1">
+
+
+::::::: {.card .border-primary .mb-3} :::::
+
+:::: {.card-header .card-title} 
+
+### Contact Info {.unnumbered}
+
+:::: 
+
+:::::: {.card-body .card-text} :::  
+
+Principal Investigator: Danielle Arigo, Ph.D.^[Rowan University, arigo@rowan.edu]
+
+:::::
+
+:::::::
+
+::: {.scroll-400b}
+
+### Background and Funding {-}
+
+Grant Title: Predictors of Reactivity to Physical Activity Measurement among Women in Midlife with Elevated CVD Risk: Examination Across 7 Studies
+
+>Risk for cardiovascular disease (CVD) substantially increases during midlife (ages 40-60) and risk trajectories differ for women and men. Increasing physical activity (PA) can mitigate these risks and there is a critical need for research that can reduce barriers to engagement in this population. PA measurement reactivity, or a change in PA engagement in response to the introduction of PA measurement, may bias the objective assessment of PA that is essential to evaluating PA promotion efforts. At present, however, evidence supporting PA measurement reactivity as a key confound in PA research is mixed, including preliminary evidence from the investigative team. Our funded R03 is designed to address key limitations of existing work – including emphasis on children or healthy, young adults with low risk for CVD and lack of attention to individual differences between participants – among women in midlife with elevated CVD risk (e.g., obesity, hypertension; N = 800). The proposed supplement is designed to further address limitations of low power for conducting critical tests of gender differences in PA measurement reactivity responses, by including men and conducting the first fully powered test of gender differences in this area. We will use 6 existing datasets from NIH-funded clinical trials and publicly available databases to examine gender differences in PA measurement reactivity among midlife adults with elevated CVD risk (N = 1940). Using a coordinated analysis approach, we will employ multilevel modeling techniques to achieve the following aims: (1) To characterize midlife adults’ PA measurement reactivity across 4 PA outcomes (full sample and within genders): steps, minutes of light activity, minutes of moderate-to-vigorous intensity activity, and minutes of sedentary behavior, (2) To determine whether the presence or extent of measurement reactivity differ based on demographic, medical, or psychological characteristics (with emphasis on gender), and (3) To determine whether the presence or extent of measurement reactivity differ based on study characteristics such as research design (i.e., observation only vs. PA observation prior to the start of an intervention) and PA monitoring procedures (i.e., research-grade accelerometers vs. commercially available wearables). We will also examine whether gender moderates the influence of characteristics such as study design, BMI, or depressive symptoms. This work will identify circumstances associated with problematic levels of PA measurement reactivity among adults in midlife and potential gender-specific targets for reducing it in an at-risk group. This R03 supplement thus represents an important extension of funded work that leverages existing data sources to increase the scientific rigor of research in the fields of PA measurement and intervention, and to provide high-quality evidence that speaks to potential gender differences in PA measurement reactivity responses. — [NIH Reporter (#3R03HL160602-02S1)](https://reporter.nih.gov/search/Vdri3WZvyE2DpWM9iNuZFA/project-details/10768082)
+
+### Documentation Content {-}
+
+[To be added]  
+
+
+:::
+
+</div>
